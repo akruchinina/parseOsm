@@ -23,9 +23,11 @@ public class XmlParser
 	static void parseNodesFromFile(String fileName, HashMap<String, OsmNode> nodes)
 	{
    		Document doc = getXmlDocument(fileName);	
-    	NodeList nodeList = doc.getElementsByTagName("node");     	
+    	NodeList nodeList = doc.getElementsByTagName("node");  
+    	System.out.println(nodeList.getLength());
     	for (int i = 0; i < nodeList.getLength(); i++) 
     	{
+    		System.out.println("parseNodesFromFile " + i);
     		Node currentNode = nodeList.item(i);
     				
     		if (currentNode.getNodeType() == Node.ELEMENT_NODE) 
