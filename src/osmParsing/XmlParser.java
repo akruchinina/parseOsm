@@ -55,6 +55,8 @@ public class XmlParser
     			Element eElement = (Element) currentWay;
     			String id = eElement.getAttribute("id");
     			NodeList tagList = eElement.getElementsByTagName("tag"); 
+    			
+    			//Берем way только определенных тегов highway
     			List<String> allowedHighwayValues = Arrays.asList("motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link", "secondary", "secondary_link", "tertiary", "tertiary_link", "unclassified", "road", "residential", "service", "living_street");
     			boolean hasAllowedHighwayTag = false;
     			int tagListSize = tagList.getLength(); 
@@ -74,16 +76,20 @@ public class XmlParser
 				{
 					continue;
 				}
-    			    			    			
+    			 
+
+				//Если значеение тега highway подходящее, создаем объект пути
 				OsmWay way = new OsmWay(id);				
 				ways.add(way);   			
     			
-    			NodeList nodeList = eElement.getElementsByTagName("nd");    	
+				//Добавляем в него вершины
+				NodeList nodeList = eElement.getElementsByTagName("nd");    	
     			int nodeListSize = nodeList.getLength();
 				for (int j = 0; j < nodeListSize; j++)
 				{
 					Node currentWayNode = nodeList.item(j);
 					OsmNode node = nodes.get(((Element) currentWayNode).getAttribute("ref"));
+					//Добавляем только те, что есть у нас в мапе вершин
 					if (node != null)
 					{
 						way.addNode(node);
@@ -92,7 +98,9 @@ public class XmlParser
     		}
     	}
 	}
-	
+	/**
+	 * Создает xml-документ для парсинга
+	 */
 	private static Document getXmlDocument(String fileName)
 	{
 		File fXmlFile = new File(fileName);
