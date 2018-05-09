@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.55 579b1eec">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2018-05-08T06:32:02Z"/>
+<bounds minlat="56.8238000" minlon="60.6159000" maxlat="56.8297000" maxlon="60.6268000"/>
+
+<node id="175040704" lat="56.8286656" lon="60.6168914" version="14" timestamp="2014-05-25T11:36:06Z" changeset="22541595" uid="2083515" user="bogad85"/>
+
+<node id="1342933735" lat="56.8285890" lon="60.6168337" version="2" timestamp="2011-09-27T07:12:53Z" changeset="9408138" uid="297300" user="Alexandr Ivanov">
+	<tag k="highway" v="traffic_signals"/>
+</node>
+
+<way id="364962725" version="30" timestamp="2017-07-16T13:59:56Z" changeset="50326610" uid="29272" user="putnik">
+	<nd ref="1342933735"/>
+	<nd ref="175040704"/>
+	<nd ref="1342933734"/>
+	<tag k="foot" v="no"/>
+	<tag k="highway" v="secondary"/>
+	<tag k="lanes" v="4"/>
+	<tag k="lit" v="yes"/>
+	<tag k="maxspeed" v="60"/>
+	<tag k="name" v="улица Белинского"/>
+	<tag k="name:en" v="Belinskogo Street"/>
+	<tag k="name:ru" v="улица Белинского"/>
+	<tag k="oneway" v="yes"/>
+	<tag k="surface" v="asphalt"/>
+	<tag k="trolley_wire" v="yes"/>
+	<tag k="turn:lanes" v="sharp_left|slight_left|slight_left|slight_left"/>
+	<tag k="wikidata" v="Q4471410"/>
+	<tag k="wikipedia" v="ru:Улица Белинского (Екатеринбург)"/>
+</way>
+
+</osm> 
