@@ -20,6 +20,7 @@ public class Main
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException
     {
+    	double startTime = System.currentTimeMillis();
     	System.out.println(1);
     	XmlParser.parseNodesFromFile(FILE_PATH, nodes);
     	System.out.println(2);
@@ -30,13 +31,16 @@ public class Main
     	deleteIsolatedNodes(nodes);
     	System.out.println(5);
     	mergeInternalNodes(nodes);
-    	    	
+    	
+    	double finishTime = System.currentTimeMillis();
+    	
     	System.out.println("Nodes:");
     	for (OsmNode node : nodes.values())
     	{
             System.out.println(node.id + " " + node.from.toString() + " " + node.to.toString());
     	} 
     	
+    	System.out.println("TIME: " + (finishTime - startTime));
   /*  	System.out.println("Ways:");
     	for (OsmWay way : ways)
     	{

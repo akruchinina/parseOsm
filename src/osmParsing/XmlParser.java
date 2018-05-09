@@ -24,12 +24,10 @@ public class XmlParser
 	{
    		Document doc = getXmlDocument(fileName);	
     	NodeList nodeList = doc.getElementsByTagName("node");  
-    	System.out.println(nodeList.getLength());
-    	for (int i = 0; i < nodeList.getLength(); i++) 
+    	int nodeListSize = nodeList.getLength();
+    	for (int i = 0; i < nodeListSize; i++) 
     	{
-    		System.out.println("parseNodesFromFile " + i);
-    		Node currentNode = nodeList.item(i);
-    				
+    		Node currentNode = nodeList.item(i);    				
     		if (currentNode.getNodeType() == Node.ELEMENT_NODE) 
     		{
     			Element eElement = (Element) currentNode;
@@ -46,8 +44,9 @@ public class XmlParser
 	static void parseWaysFromFile(String fileName, HashMap<String, OsmNode> nodes, HashSet<OsmWay> ways)
 	{
 		Document doc = getXmlDocument(fileName);	
-    	NodeList wayList = doc.getElementsByTagName("way");     	
-    	for (int i = 0; i < wayList.getLength(); i++) 
+    	NodeList wayList = doc.getElementsByTagName("way");   
+    	int wayListSize = wayList.getLength();
+    	for (int i = 0; i < wayListSize; i++) 
     	{
     		Node currentWay = wayList.item(i);
     				
@@ -58,7 +57,8 @@ public class XmlParser
     			NodeList tagList = eElement.getElementsByTagName("tag"); 
     			List<String> allowedHighwayValues = Arrays.asList("motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link", "secondary", "secondary_link", "tertiary", "tertiary_link", "unclassified", "road", "residential", "service", "living_street");
     			boolean hasAllowedHighwayTag = false;
-				for (int j = 0; j < tagList.getLength(); j++)
+    			int tagListSize = tagList.getLength(); 
+				for (int j = 0; j < tagListSize; j++)
 				{
 					Element tagElement = (Element) tagList.item(j);
 					String key = tagElement.getAttribute("k");
@@ -78,8 +78,9 @@ public class XmlParser
 				OsmWay way = new OsmWay(id);				
 				ways.add(way);   			
     			
-    			NodeList nodeList = eElement.getElementsByTagName("nd");    			
-				for (int j = 0; j < nodeList.getLength(); j++)
+    			NodeList nodeList = eElement.getElementsByTagName("nd");    	
+    			int nodeListSize = nodeList.getLength();
+				for (int j = 0; j < nodeListSize; j++)
 				{
 					Node currentWayNode = nodeList.item(j);
 					OsmNode node = nodes.get(((Element) currentWayNode).getAttribute("ref"));
