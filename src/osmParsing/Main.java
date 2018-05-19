@@ -32,13 +32,13 @@ public class Main
     	
     	//Удаляем изолированные вершины
     	NodeUtils.deleteIsolatedNodes(nodes);
-
-    	//Сливаем внутренние вершины
-    	//NodeUtils.deleteInternalNodes(nodes);
     	
     	//Добавляем короткие id от 0 до N
     	NodeUtils.addShortId(nodes);
-    
+    	
+    	//Сливаем внутренние вершины
+    	NodeUtils.deleteInternalNodes(nodes);
+
     	//После всех махинаций с ребрами и вершинами - сохраняем итоговое кол-во ребер и вершин
     	setNodesAndEdgesCount();
     	

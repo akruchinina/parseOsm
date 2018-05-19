@@ -3,6 +3,7 @@ package osmParsing;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class NodeUtils 
@@ -81,7 +82,7 @@ public class NodeUtils
     	{
     		HashMap<String, OsmNode>  fromMap = entryNode.getValue().from;
     		HashMap<String, OsmNode>  toMap = entryNode.getValue().to;
-    		if (fromMap.size() == 1 && toMap.size() == 1)
+    		if (fromMap.size() == 1 && toMap.size() == 1  && !fromMap.equals(toMap))
     		{
     			OsmNode from = fromMap.values().iterator().next();
     			OsmNode to = toMap.values().iterator().next();
@@ -93,6 +94,28 @@ public class NodeUtils
     			to.from.put(from.id, from);
     			deleteKeys.add(entryNode.getKey());
     		}
+    		
+    		if (fromMap.size() == 2 && toMap.size() == 2  && fromMap.equals(toMap))
+    		{
+    			Iterator<OsmNode> iterator = fromMap.values().iterator();
+    			OsmNode firstNode = iterator.next();
+    			OsmNode secondNode = iterator.next();
+    			
+    			firstNode.to.remove(entryNode.getKey());
+    			firstNode.from.remove(entryNode.getKey());
+
+    			secondNode.to.remove(entryNode.getKey());
+    			secondNode.from.remove(entryNode.getKey());
+    			
+    			firstNode.to.put(secondNode.id, secondNode);
+    			firstNode.from.put(secondNode.id, secondNode);
+
+    			secondNode.to.put(firstNode.id, firstNode);
+    			secondNode.from.put(firstNode.id, firstNode);
+    			
+    			deleteKeys.add(entryNode.getKey());
+    		}
+    		
 		}
     	
     	for (String key : deleteKeys) 
