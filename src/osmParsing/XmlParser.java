@@ -58,28 +58,26 @@ public class XmlParser
     			
     			//Берем way только определенных тегов highway
     			List<String> allowedHighwayValues = Arrays.asList("motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link", "secondary", "secondary_link", "tertiary", "tertiary_link", "unclassified", "road", "residential", "service", "living_street");
-    			boolean hasAllowedHighwayTag = false;
-    			int tagListSize = tagList.getLength(); 
-				for (int j = 0; j < tagListSize; j++)
-				{
-					Element tagElement = (Element) tagList.item(j);
-					String key = tagElement.getAttribute("k");
-					String value = tagElement.getAttribute("v");
-					if (key.equals("highway") && allowedHighwayValues.contains(value))
-					{
-						hasAllowedHighwayTag = true;
-						break;
-					}
-				}
-				
-				if (!hasAllowedHighwayTag)
+    			
+    			//Проверяем, дорога ли это?
+    			String highwayTagValue = getTagValue(tagList, "highway");
+    	
+				if (!allowedHighwayValues.contains(highwayTagValue))
 				{
 					continue;
 				}
     			 
-
+				//Односторонняя ли?
+				boolean isOneWay = false;
+				String oneWayTagValue = getTagValue(tagList, "oneway");
+				//motorway - односторонняя по умолчанию
+				if ("yes".equals(oneWayTagValue) || highwayTagValue.startsWith("motorway") && oneWayTagValue.isEmpty())
+				{
+					isOneWay = true;
+				}
+				
 				//Если значеение тега highway подходящее, создаем объект пути
-				OsmWay way = new OsmWay(id);				
+				OsmWay way = new OsmWay(id, isOneWay);				
 				ways.add(way);   			
     			
 				//Добавляем в него вершины
@@ -118,6 +116,22 @@ public class XmlParser
 		}
     	doc.getDocumentElement().normalize();    	
 		return doc;
+	}
+	
+	private static String getTagValue(NodeList tagList, String tagKey)
+	{
+		int tagListSize = tagList.getLength(); 
+		for (int j = 0; j < tagListSize; j++)
+		{
+			Element tagElement = (Element) tagList.item(j);
+			String key = tagElement.getAttribute("k");
+			String value = tagElement.getAttribute("v");
+			if (key.equals(tagKey))
+			{
+				return value;
+			}
+		}
+		return null;
 	}
 	
 }

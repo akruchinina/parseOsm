@@ -7,8 +7,10 @@ public class OsmNode
 	String id;
 	String lat;
 	String lon;
+	Integer shortId;
 	HashMap<String, OsmNode> from;
 	HashMap<String, OsmNode> to;
+	Integer laneCount;
 	
 	public OsmNode(String id, String lat, String lon)
 	{
@@ -21,6 +23,11 @@ public class OsmNode
 	
 	public String toString()
 	{
-		return String.format("id: %s", this.id);
-	}	
+		return String.format("id: %s", this.shortId);
+	}
+	
+	public void setShortId(Integer shortId)
+	{
+		this.shortId = shortId;
+	}
 }

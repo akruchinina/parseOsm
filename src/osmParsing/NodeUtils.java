@@ -25,11 +25,21 @@ public class NodeUtils
     			{
         			OsmNode previousNodeInWay = wayNodes.get(i - 1);
         			currentNodeInWay.from.put(previousNodeInWay.id, previousNodeInWay);
+        			        			
+        			if (!way.isOneWay)
+        			{
+            			currentNodeInWay.to.put(previousNodeInWay.id, previousNodeInWay);
+        			}
     			}
     			if (i != wayNodesSize - 1)
     			{
         			OsmNode nextNodeInWay = wayNodes.get(i + 1);	        			
         			currentNodeInWay.to.put(nextNodeInWay.id, nextNodeInWay);
+        			
+        			if (!way.isOneWay)
+        			{
+        				currentNodeInWay.from.put(nextNodeInWay.id, nextNodeInWay);
+        			}
     			}
     		}
     	}
@@ -90,4 +100,13 @@ public class NodeUtils
     		nodes.remove(key);
 		}
     }
+
+	public static void addShortId(HashMap<String, OsmNode> nodes) 
+	{
+		int id = 1;
+		for (Entry<String, OsmNode> entryNode : nodes.entrySet()) 
+		{
+			entryNode.getValue().setShortId(id++);
+		}
+	}
 }
