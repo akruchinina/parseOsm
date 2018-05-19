@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 
 public class NodeUtils 
 {
+	public final static double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
+			
 	/**
 	 * Добавляет вершинам из nodes связи между собой (список смежности) по данным из ways	 
 	 * @param nodes
@@ -21,21 +23,24 @@ public class NodeUtils
     		int wayNodesSize = wayNodes.size();
     		for (int i = 0; i < wayNodesSize; i++)
     		{
+    			Integer lineCount = way.isOneWay ? way.laneCount * 1000 :  way.laneCount * 1000 / 2;
     			OsmNode currentNodeInWay = wayNodes.get(i);
     			if (i != 0)
     			{
         			OsmNode previousNodeInWay = wayNodes.get(i - 1);
         			currentNodeInWay.from.put(previousNodeInWay.id, previousNodeInWay);
-        			        			
+          			        			
         			if (!way.isOneWay)
         			{
             			currentNodeInWay.to.put(previousNodeInWay.id, previousNodeInWay);
+            			currentNodeInWay.toCapacity.put(previousNodeInWay.id, lineCount);
         			}
     			}
     			if (i != wayNodesSize - 1)
     			{
         			OsmNode nextNodeInWay = wayNodes.get(i + 1);	        			
         			currentNodeInWay.to.put(nextNodeInWay.id, nextNodeInWay);
+        			currentNodeInWay.toCapacity.put(nextNodeInWay.id, lineCount); 
         			
         			if (!way.isOneWay)
         			{
@@ -69,10 +74,8 @@ public class NodeUtils
     }
     
     /**
-     * !!! Верно только для односторонних дорог, нужно править логику!!!
-     * 
      * Удаляет соединительные вершины, которые не являются перекрестками
-     * (объединяет 2 соседних ребра в одно)
+     * 
      * @param nodes
      */
     public static void deleteInternalNodes(HashMap<String, OsmNode> nodes)
@@ -87,10 +90,13 @@ public class NodeUtils
     			OsmNode from = fromMap.values().iterator().next();
     			OsmNode to = toMap.values().iterator().next();
 
+    			Integer capacity = from.toCapacity.get(entryNode.getKey());
     			from.to.remove(entryNode.getKey());
     			to.from.remove(entryNode.getKey());
     			
     			from.to.put(to.id, to);
+    			from.toCapacity.put(to.id, capacity);
+    			
     			to.from.put(from.id, from);
     			deleteKeys.add(entryNode.getKey());
     		}
@@ -101,6 +107,7 @@ public class NodeUtils
     			OsmNode firstNode = iterator.next();
     			OsmNode secondNode = iterator.next();
     			
+    			
     			firstNode.to.remove(entryNode.getKey());
     			firstNode.from.remove(entryNode.getKey());
 
@@ -108,14 +115,18 @@ public class NodeUtils
     			secondNode.from.remove(entryNode.getKey());
     			
     			firstNode.to.put(secondNode.id, secondNode);
+    			
     			firstNode.from.put(secondNode.id, secondNode);
 
     			secondNode.to.put(firstNode.id, firstNode);
     			secondNode.from.put(firstNode.id, firstNode);
+
+    			Integer capacity = firstNode.toCapacity.get(entryNode.getKey());
+    			firstNode.toCapacity.put(secondNode.id, capacity);
+    			secondNode.toCapacity.put(firstNode.id, capacity);
     			
     			deleteKeys.add(entryNode.getKey());
     		}
-    		
 		}
     	
     	for (String key : deleteKeys) 
@@ -131,5 +142,24 @@ public class NodeUtils
 		{
 			entryNode.getValue().setShortId(id++);
 		}
+	}
+
+	public static Double calcDistanceInKilometr(OsmNode node, OsmNode toNode) 
+	{
+		double aLat = Double.valueOf(node.lat);
+		double aLng = Double.valueOf(node.lon);
+		double bLat = Double.valueOf(toNode.lat);
+		double bLng = Double.valueOf(toNode.lon);
+
+	    double latDistance = Math.toRadians(aLat - bLat);
+	    double lngDistance = Math.toRadians(aLng - bLng);
+
+	    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+	      + Math.cos(Math.toRadians(aLat)) * Math.cos(Math.toRadians(bLat))
+	      * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+	    return AVERAGE_RADIUS_OF_EARTH_KM * c;
 	}
 }

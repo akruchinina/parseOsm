@@ -76,8 +76,12 @@ public class XmlParser
 					isOneWay = true;
 				}
 				
+				
+				//Сколько полос?
+				String laneCount = getTagValue(tagList, "lanes");
+								
 				//Если значеение тега highway подходящее, создаем объект пути
-				OsmWay way = new OsmWay(id, isOneWay);				
+				OsmWay way = new OsmWay(id, isOneWay, laneCount);				
 				ways.add(way);   			
     			
 				//Добавляем в него вершины

@@ -9,7 +9,9 @@ public class OsmNode
 	String lon;
 	Integer shortId;
 	HashMap<String, OsmNode> from;
+		
 	HashMap<String, OsmNode> to;
+	HashMap<String, Integer> toCapacity;
 	Integer laneCount;
 	
 	public OsmNode(String id, String lat, String lon)
@@ -19,6 +21,7 @@ public class OsmNode
 		this.lon = lon;
 		this.from = new HashMap<>();
 		this.to = new HashMap<>();
+		this.toCapacity = new HashMap<>();
 	}
 	
 	public String toString()

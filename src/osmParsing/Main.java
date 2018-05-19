@@ -46,14 +46,8 @@ public class Main
     	
      	
     	//Выводим список ребер
-    	System.out.println(String.format("%s %s %s", nodesCount, edgesCount, 1));
-    	for (OsmNode node : nodes.values())
-    	{
-    		for (OsmNode toNode : node.to.values())
-    		{
-    			System.out.println(node.shortId + " " + toNode.shortId);
-    		}
-    	} 
+    	//printEdgeListWithDistance();
+    	printEdgeListWithCapacity();
     	
     	//Выводим время работы
     	System.out.println("TIME: " + (finishTime - startTime));
@@ -66,5 +60,29 @@ public class Main
 		{
 			edgesCount += entryNode.to.size();
 		}
+	}
+	
+	private static void printEdgeListWithDistance()
+	{
+    	System.out.println(String.format("%s %s %s", nodesCount, edgesCount, 1));
+    	for (OsmNode node : nodes.values())
+    	{
+    		for (OsmNode toNode : node.to.values())
+    		{
+    			System.out.println(String.format("%s %s %(.2f", node.shortId, toNode.shortId, NodeUtils.calcDistanceInKilometr(node, toNode)));
+    		}
+    	} 
+	}
+	
+	private static void printEdgeListWithCapacity()
+	{
+    	System.out.println(String.format("%s %s %s", nodesCount, edgesCount, 1));
+    	for (OsmNode node : nodes.values())
+    	{
+    		for (OsmNode toNode : node.to.values())
+    		{
+    			System.out.println(String.format("%s %s %s", node.shortId, toNode.shortId, node.toCapacity.get((toNode.id))));
+    		}
+    	} 
 	}
 }
