@@ -21,9 +21,12 @@ public class NodeUtils
     	{
     		ArrayList<OsmNode> wayNodes = way.nodes;
     		int wayNodesSize = wayNodes.size();
+			//Если дорога двухсторонняя, кол-во полос делим на 2 для рассчета мощности одного ребра
+			Integer capacity = way.capacity;
+			Integer reverseCapacity = way.reverseCapacity;
+			
     		for (int i = 0; i < wayNodesSize; i++)
     		{
-    			Integer lineCount = way.isOneWay ? way.laneCount * 1000 :  way.laneCount * 1000 / 2;
     			OsmNode currentNodeInWay = wayNodes.get(i);
     			if (i != 0)
     			{
@@ -33,14 +36,14 @@ public class NodeUtils
         			if (!way.isOneWay)
         			{
             			currentNodeInWay.to.put(previousNodeInWay.id, previousNodeInWay);
-            			currentNodeInWay.toCapacity.put(previousNodeInWay.id, lineCount);
+            			currentNodeInWay.toCapacity.put(previousNodeInWay.id, reverseCapacity);
         			}
     			}
     			if (i != wayNodesSize - 1)
     			{
         			OsmNode nextNodeInWay = wayNodes.get(i + 1);	        			
         			currentNodeInWay.to.put(nextNodeInWay.id, nextNodeInWay);
-        			currentNodeInWay.toCapacity.put(nextNodeInWay.id, lineCount); 
+        			currentNodeInWay.toCapacity.put(nextNodeInWay.id, capacity); 
         			
         			if (!way.isOneWay)
         			{
